@@ -258,7 +258,10 @@ struct DeviceSessionsRow: View {
         phoneNumber: "+1 (555) 123-4567",
         name: "John Doe",
         avatarUrl: nil,
-        bio: "iOS developer and open source enthusiast"
+        bio: "iOS developer and open source enthusiast",
+        isOnline: false,
+        lastSeen: nil,
+        createdAt: nil
     ))
     .environmentObject(AppState.shared)
 }

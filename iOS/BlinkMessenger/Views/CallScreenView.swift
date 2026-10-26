@@ -114,7 +114,7 @@ final class CallViewModel: ObservableObject {
 
 // MARK: - Supporting Views
 
-struct CallTopBarView: Binding<Bool> {
+struct CallTopBarView: View {
     @Binding var showingEndCallAlert: Bool
     
     var body: some View {
@@ -264,12 +264,12 @@ struct VideoPreviewView: View {
     }
 }
 
-struct VideoViewModel: ObservableObject {
+class VideoViewModel: ObservableObject {
     @Published var previewImage: UIImage?
     @Published var isCameraAccessEnabled = false
     @Published var isLocal = false
     
-    func setupCamera(isLocal: async) async {
+    func setupCamera(isLocal: Bool) async {
         self.isLocal = isLocal
         // TODO: Set up AVCaptureSession for camera preview
         // For now, simulate
@@ -363,7 +363,10 @@ struct CallControlButton: View {
             phoneNumber: "+1 (555) 987-6543",
             name: "Jane Doe",
             avatarUrl: nil,
-            bio: nil
+            bio: nil,
+            isOnline: false,
+            lastSeen: nil,
+            createdAt: nil
         ),
         type: .VIDEO,
         isOutgoing: true

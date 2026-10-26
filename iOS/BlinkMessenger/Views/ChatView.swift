@@ -1,6 +1,7 @@
 // ChatView - Individual conversation screen
 import SwiftUI
 import PhotosUI
+import Combine
 
 struct ChatView: View {
     let conversation: Conversation

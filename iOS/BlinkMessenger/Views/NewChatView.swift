@@ -1,5 +1,6 @@
 // NewChatView - Start new conversation
 import SwiftUI
+import PhotosUI
 
 struct NewChatView: View {
     @EnvironmentObject var appState: AppState
