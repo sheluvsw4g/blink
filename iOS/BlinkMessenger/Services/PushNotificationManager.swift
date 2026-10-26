@@ -51,6 +51,7 @@ final class PushNotificationManager: NSObject, ObservableObject {
         print("Failed to register for remote notifications: \(error)")
     }
     
+    @MainActor
     func handleNotification(_ userInfo: [AnyHashable: Any]) {
         // Handle notification when app is in foreground or tapped from background
         print("Received push notification: \(userInfo)")

@@ -18,7 +18,7 @@ struct ChatsListView: View {
     
     var body: some View {
         ZStack {
-            if appState.conversations.isEmpty && !appState.isLoading {
+            if appState.conversations.isEmpty {
                 emptyStateView
             } else {
                 listView

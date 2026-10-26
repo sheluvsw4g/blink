@@ -83,7 +83,7 @@ enum ParticipantRole: String, Codable {
     case MEMBER = "MEMBER"
 }
 
-struct ConversationParticipant: Codable, Identifiable {
+struct ConversationParticipant: Codable, Identifiable, Hashable {
     let id: String
     let userId: String
     let conversationId: String
@@ -94,7 +94,7 @@ struct ConversationParticipant: Codable, Identifiable {
     let user: User
 }
 
-struct Conversation: Codable, Identifiable {
+struct Conversation: Codable, Identifiable, Hashable {
     let id: String
     let type: ConversationType
     let name: String?
@@ -127,7 +127,7 @@ struct Conversation: Codable, Identifiable {
     var isGroup: Bool { type == .GROUP }
 }
 
-struct MessagePreview: Codable {
+struct MessagePreview: Codable, Hashable {
     let id: String
     let type: MessageType
     let content: String?
@@ -135,6 +135,12 @@ struct MessagePreview: Codable {
     let senderId: String
     let createdAt: Date
     let status: MessageStatusType
+    
+    var formattedTime: String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter.string(from: createdAt)
+    }
 }
 
 // MARK: - Message Models

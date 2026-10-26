@@ -164,7 +164,7 @@ final class SocketService: ObservableObject {
             
             try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
             
-            if let token = AppState.shared.accessToken {
+            if let token = await AppState.shared.accessToken {
                 await connect(token: token)
             }
         } else {
@@ -191,6 +191,19 @@ final class SocketService: ObservableObject {
         let payload = try? encoder.encode([event, data])
         let payloadString = payload.flatMap { String(data: $0, encoding: .utf8) } ?? "[]"
         await sendSocketIOPacket(type: 2, data: payloadString)
+    }
+    
+    // Convenience emit for dictionary payloads
+    func emitDict(_ event: String, _ data: [String: Any]) async {
+        var payload: [Any] = [event]
+        if let jsonData = try? JSONSerialization.data(withJSONObject: data),
+           let json = try? JSONSerialization.jsonObject(with: jsonData) {
+            payload.append(json)
+        }
+        if let payloadData = try? JSONSerialization.data(withJSONObject: payload),
+           let payloadString = String(data: payloadData, encoding: .utf8) {
+            await sendSocketIOPacket(type: 2, data: payloadString)
+        }
     }
     
     func on(_ event: String, handler: @escaping (Data) -> Void) {
@@ -234,7 +247,7 @@ final class SocketService: ObservableObject {
     }
     
     func sendReadReceipt(conversationId: String, messageIds: [String]) async {
-        await emit("messages:read", ["conversationId": conversationId, "messageIds": messageIds])
+        await emitDict("messages:read", ["conversationId": conversationId, "messageIds": messageIds])
     }
     
     func updateStatus(_ status: String) async {

@@ -36,8 +36,9 @@ struct CallScreenView: View {
                 // Bottom bar
                 CallBottomBarView(
                     isMuted: viewModel.isMuted,
+                    isSpeakerOn: viewModel.isSpeakerOn,
                     onEndCall: { await viewModel.endCall() },
-    onMuteToggle: { await viewModel.toggleMute() },
+                    onMuteToggle: { await viewModel.toggleMute() },
                     onSpeakerToggle: { /* TODO */ }
                 )
             }
@@ -103,7 +104,9 @@ final class CallViewModel: ObservableObject {
         await socketEmit("call:end", ["callId": callInfo.callId])
         
         // Return to chats
-        appState.endActiveCall()
+        await MainActor.run {
+            AppState.shared.endActiveCall()
+        }
     }
     
     private func socketEmit(_ event: String, _ data: [String: Any]) {
@@ -135,13 +138,13 @@ struct CallTopBarView: View {
                     Text("Calling...")
                         .font(.headline)
                         .foregroundColor(.white)
-                    Text(callInfo.otherUser.displayName)
+                    Text(viewModel.callInfo.otherUser.displayName)
                         .font(.subheadline)
                         .foregroundColor(.white.opacity(0.7))
                 }
                 
                 // Duration
-                Text(formatDuration(Int(callDuration)))
+                Text(formatDuration(Int(viewModel.callDuration)))
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.white.opacity(0.7))
             }
@@ -268,6 +271,7 @@ class VideoViewModel: ObservableObject {
     @Published var previewImage: UIImage?
     @Published var isCameraAccessEnabled = false
     @Published var isLocal = false
+    @Published var isLocalVideoAvailable = false
     
     func setupCamera(isLocal: Bool) async {
         self.isLocal = isLocal
