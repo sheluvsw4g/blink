@@ -364,7 +364,6 @@ enum SocketEvent: String {
     case leaveConversation = "leave:conversation"
     case typingStart = "typing:start"
     case typingStop = "typing:stop"
-    case sendReadReceipt = "messages:read"
     case statusUpdate = "status:update"
     case callInitiate = "call:initiate"
     case callAnswer = "call:answer"
