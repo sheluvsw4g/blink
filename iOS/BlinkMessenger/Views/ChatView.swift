@@ -38,9 +38,8 @@ struct ChatView: View {
                                 .id(message.id)
                                 .onAppear {
                                     // Load more when reaching top
-                                    let firstId = viewModel.messages.first?.id
-                                    if message.id == firstId {
-                                        Task {
+                                    Task {
+                                        if message.id == viewModel.messages.first?.id {
                                             await viewModel.loadMoreMessages()
                                         }
                                     }
@@ -812,7 +811,7 @@ struct ChatInputBarView: View {
                 
                 // Voice/Video call buttons
                 if showVoiceButton {
-                    Button(action: onVoiceMessage) {
+                    Button(action: { Task { await onVoiceMessage() } }) {
                         Image(systemName: "mic.fill")
                             .font(.system(size: 22))
                             .foregroundColor(.blue)
