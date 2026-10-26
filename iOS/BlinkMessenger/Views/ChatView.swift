@@ -29,7 +29,7 @@ struct ChatView: View {
                 ScrollViewReader { proxy in
                     ScrollView {
                         LazyVStack(spacing: 0) {
-                            ForEach(Array(viewModel.messages.enumerated()), id: \.element.id) { index, message in
+                            ForEach(viewModel.messages) { message in
                                 MessageBubbleView(
                                     message: message,
                                     isFromCurrentUser: message.senderId == appState.currentUser?.id,
@@ -37,11 +37,8 @@ struct ChatView: View {
                                 )
                                 .id(message.id)
                                 .onAppear {
-                                    // Load more when reaching top
-                                    if index == 0 {
-                                        Task {
-                                            await viewModel.loadMoreMessages()
-                                        }
+                                    Task {
+                                        await viewModel.loadMoreIfNeeded(message: message)
                                     }
                                 }
                             }
@@ -256,6 +253,11 @@ final class ChatViewModel: ObservableObject {
         } catch {
             print("Failed to load more messages: \(error)")
         }
+    }
+    
+    func loadMoreIfNeeded(message: Message) async {
+        guard message.id == messages.first?.id else { return }
+        await loadMoreMessages()
     }
     
     func sendMessage(replyToId: String? = nil) async {
