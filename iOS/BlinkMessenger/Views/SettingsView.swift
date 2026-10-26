@@ -86,10 +86,12 @@ struct SettingsView: View {
                 Text("Are you sure you want to log out?")
             }
             .sheet(isPresented: $showingPrivacyPolicy) {
-                PrivacyPolicyView()
+                Text("Privacy Policy")
+                    .navigationTitle("Privacy Policy")
             }
             .sheet(isPresented: $showingAbout) {
-                AboutView()
+                Text("About Blink")
+                    .navigationTitle("About")
             }
         }
     }

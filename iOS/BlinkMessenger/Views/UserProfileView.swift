@@ -134,11 +134,14 @@ struct UserProfileView: View {
     }
     
     private var initials: String {
-        let components = user.name.components(separatedBy: " ")
+        guard let name = user.name else {
+            return String(user.phoneNumber.suffix(2)).uppercased()
+        }
+        let components = name.components(separatedBy: " ")
         if components.count >= 2 {
             return "\(components[0].first!)\(components[1].first!)".uppercased()
         }
-        return String(user.name.prefix(2)).uppercased()
+        return String(name.prefix(2)).uppercased()
     }
 }
 
@@ -169,7 +172,6 @@ struct EditProfileView: View {
                 
                 Section(header: Text("About")) {
                     TextField("About you (optional)", text: $bio)
-                        .textContentType(.bio)
                         .lineLimit(3)
                 }
                 

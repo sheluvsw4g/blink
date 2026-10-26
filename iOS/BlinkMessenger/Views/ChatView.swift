@@ -7,7 +7,7 @@ struct ChatView: View {
     let conversation: Conversation
     @EnvironmentObject var appState: AppState
     @StateObject private var viewModel: ChatViewModel
-    @FocusState private var isInputFocused: Bool
+    @FocusState private var isInputFocused: Bool?
     @State private var scrollProxy: ScrollViewProxy?
     @State private var showingMediaPicker = false
     @State private var showingActionSheet = false
@@ -38,7 +38,8 @@ struct ChatView: View {
                                 .id(message.id)
                                 .onAppear {
                                     // Load more when reaching top
-                                    if message.id == viewModel.messages.first?.id {
+                                    let firstId = viewModel.messages.first?.id
+                                    if message.id == firstId {
                                         Task {
                                             await viewModel.loadMoreMessages()
                                         }
@@ -82,7 +83,7 @@ struct ChatView: View {
                     text: $viewModel.draftMessage,
                     isFocused: $isInputFocused,
                     replyingTo: replyingToMessage,
-                    onSend: { await viewModel.sendMessage() },
+                    onSend: { await viewModel.sendMessage(replyToId: replyingToMessage?.id) },
                     onAttach: { showingActionSheet = true },
                     onVoiceMessage: { await viewModel.startVoiceRecording() },
                     onCall: { startCall(type: .VOICE) },
@@ -250,7 +251,7 @@ final class ChatViewModel: ObservableObject {
                 conversationId: conversation.id,
                 before: firstMessage.createdAt
             )
-            let newMessages = response.messages ?? []
+            var newMessages = response.messages ?? []
             newMessages.reverse()
             messages = newMessages + messages
         } catch {
@@ -258,9 +259,9 @@ final class ChatViewModel: ObservableObject {
         }
     }
     
-    func sendMessage() async {
+    func sendMessage(replyToId: String? = nil) async {
         let text = draftMessage.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !text.isEmpty || replyingToMessage != nil else { return }
+        guard !text.isEmpty else { return }
         
         draftMessage = ""
         stopTyping()
@@ -269,12 +270,15 @@ final class ChatViewModel: ObservableObject {
             let request = SendMessageRequest(
                 conversationId: conversation.id,
                 type: .TEXT,
-                content: text.isEmpty ? nil : text,
-                replyToId: replyingToMessage?.id
+                content: text,
+                mediaUrl: nil,
+                mediaType: nil,
+                mediaSize: nil,
+                duration: nil,
+                replyToId: replyToId
             )
             
             let message = try await APIService.shared.sendMessage(request)
-            replyingToMessage = nil
             
             // Optimistic update
             messages.append(message)
@@ -306,7 +310,9 @@ final class ChatViewModel: ObservableObject {
                         content: nil,
                         mediaUrl: upload.file.url,
                         mediaType: mimeType,
-                        mediaSize: data.count
+                        mediaSize: data.count,
+                        duration: nil,
+                        replyToId: nil
                     )
                     
                     let message = try await APIService.shared.sendMessage(request)
@@ -754,7 +760,7 @@ struct ReplyPreviewInline: View {
 
 struct ChatInputBarView: View {
     @Binding var text: String
-    @Binding var isFocused: Bool
+    @Binding var isFocused: Bool?
     let replyingTo: Message?
     let onSend: () async -> Void
     let onAttach: () -> Void
@@ -780,7 +786,6 @@ struct ChatInputBarView: View {
                 HStack(spacing: 8) {
                     TextField("Message", text: $text, axis: .vertical)
                         .font(.body)
-                        .focused($isFocused)
                         .lineLimit(1...5)
                         .onChange(of: text) { _, _ in
                             showVoiceButton = text.trimmingCharacters(in: .whitespaces).isEmpty

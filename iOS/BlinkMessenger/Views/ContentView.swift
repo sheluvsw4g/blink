@@ -37,7 +37,8 @@ struct ContentView: View {
             .badge(appState.unreadCount > 0 ? "\(appState.unreadCount)" : nil)
             
             NavigationStack {
-                CallsHistoryView()
+                Text("Calls History")
+                    .navigationTitle("Calls")
             }
             .tabItem {
                 Label(AppState.Tab.calls.title, systemImage: AppState.Tab.calls.icon)
@@ -45,7 +46,8 @@ struct ContentView: View {
             .tag(AppState.Tab.calls)
             
             NavigationStack {
-                ContactsView()
+                Text("Contacts")
+                    .navigationTitle("Contacts")
             }
             .tabItem {
                 Label(AppState.Tab.contacts.title, systemImage: AppState.Tab.contacts.icon)
