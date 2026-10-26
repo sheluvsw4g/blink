@@ -1,6 +1,6 @@
 // UserProfileView - View for viewing/editing user profile
 import SwiftUI
-import PhotosPicker
+import PhotosUI
 
 struct UserProfileView: View {
     let user: User

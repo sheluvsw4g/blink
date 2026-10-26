@@ -251,7 +251,7 @@ final class AuthViewModel: ObservableObject {
     @Published var phoneNumber = ""
     @Published var codeDigits: [String] = Array(repeating: "", count: 6)
     @Published var userName = ""
-    @Published var selectedCountry = CountryCode.default
+    @Published var selectedCountry = CountryCode.defaultCode
     @Published var avatarItem: PhotosPickerItem?
     @Published var selectedImage: UIImage?
     @Published var isLoading = false
@@ -441,7 +441,7 @@ struct CountryCode: Identifiable {
     let name: String
     let flag: String
     
-    static let default = CountryCode(code: "+1", name: "United States", flag: "🇺🇸")
+    static let defaultCode = CountryCode(code: "+1", name: "United States", flag: "🇺🇸")
     
     static let commonCodes = [
         CountryCode(code: "+1", name: "United States/Canada", flag: "🇺🇸"),

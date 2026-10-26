@@ -33,7 +33,7 @@ struct SettingsView: View {
                     )
                     NotificationToggleRow(
                         title: "Call notifications",
-                        subtitle "Incoming call alerts",
+                        subtitle: "Incoming call alerts",
                         isOn: $notificationSettings.callNotifications
                     )
                     NotificationToggleRow(
