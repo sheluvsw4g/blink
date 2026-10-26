@@ -29,7 +29,7 @@ struct ChatView: View {
                 ScrollViewReader { proxy in
                     ScrollView {
                         LazyVStack(spacing: 0) {
-                            ForEach(viewModel.messages) { message in
+                            ForEach(Array(viewModel.messages.enumerated()), id: \.element.id) { index, message in
                                 MessageBubbleView(
                                     message: message,
                                     isFromCurrentUser: message.senderId == appState.currentUser?.id,
@@ -38,8 +38,8 @@ struct ChatView: View {
                                 .id(message.id)
                                 .onAppear {
                                     // Load more when reaching top
-                                    Task {
-                                        if message.id == viewModel.messages.first?.id {
+                                    if index == 0 {
+                                        Task {
                                             await viewModel.loadMoreMessages()
                                         }
                                     }
