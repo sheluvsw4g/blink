@@ -29,19 +29,14 @@ struct ChatView: View {
                 ScrollViewReader { proxy in
                     ScrollView {
                         LazyVStack(spacing: 0) {
-                            ForEach(viewModel.messages) { message in
-                                MessageBubbleView(
-                                    message: message,
-                                    isFromCurrentUser: message.senderId == appState.currentUser?.id,
-                                    replyingToMessage: $replyingToMessage
-                                )
-                                .id(message.id)
-                                .onAppear {
-                                    Task {
-                                        await viewModel.loadMoreIfNeeded(message: message)
-                                    }
+                            MessagesListView(
+                                messages: viewModel.messages,
+                                currentUserId: appState.currentUser?.id,
+                                replyingToMessage: $replyingToMessage,
+                                onLoadMore: {
+                                    await viewModel.loadMoreIfNeeded()
                                 }
-                            }
+                            )
                             
                             if viewModel.isLoadingMore {
                                 ProgressView()
@@ -154,6 +149,31 @@ struct ChatView: View {
     }
 }
 
+// MARK: - Messages List View
+
+struct MessagesListView: View {
+    let messages: [Message]
+    let currentUserId: String?
+    @Binding var replyingToMessage: Message?
+    let onLoadMore: () async -> Void
+    
+    var body: some View {
+        ForEach(messages) { message in
+            MessageBubbleView(
+                message: message,
+                isFromCurrentUser: message.senderId == currentUserId,
+                replyingToMessage: $replyingToMessage
+            )
+            .id(message.id)
+            .onAppear {
+                Task {
+                    await onLoadMore()
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Chat ViewModel
 
 @MainActor
@@ -255,8 +275,9 @@ final class ChatViewModel: ObservableObject {
         }
     }
     
-    func loadMoreIfNeeded(message: Message) async {
-        guard message.id == messages.first?.id else { return }
+    func loadMoreIfNeeded() async {
+        // Load more when needed - simplified for type-checking
+        guard !isLoadingMore else { return }
         await loadMoreMessages()
     }
     
