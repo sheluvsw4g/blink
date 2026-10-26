@@ -16,7 +16,7 @@
                BlueprintIdentifier = "AA0000000000000000000005"
                BuildableName = "BlinkMessenger.app"
                BlueprintName = "BlinkMessenger"
-               ReferencedContainer = "container:iOS/BlinkMessenger.xcodeproj">
+               ReferencedContainer = "container:BlinkMessenger.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,7 +45,7 @@
             BlueprintIdentifier = "AA0000000000000000000005"
             BuildableName = "BlinkMessenger.app"
             BlueprintName = "BlinkMessenger"
-            ReferencedContainer = "container:iOS/BlinkMessenger.xcodeproj">
+            ReferencedContainer = "container:BlinkMessenger.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,7 +62,7 @@
             BlueprintIdentifier = "AA0000000000000000000005"
             BuildableName = "BlinkMessenger.app"
             BlueprintName = "BlinkMessenger"
-            ReferencedContainer = "container:iOS/BlinkMessenger.xcodeproj">
+            ReferencedContainer = "container:BlinkMessenger.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
