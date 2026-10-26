@@ -1,28 +1,47 @@
-// !$*UTF8*$!
+﻿// !$*UTF8*$!
 {
 	archiveVersion = 1;
-	objectVersion = 77;
+	objectVersion = 56;
 	classes = {
 	};
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA0000000000000000000009 /* BlinkMessenger in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000003 /* BlinkMessenger */; };
+		BF0000000000000000000001 /* BlinkMessengerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000001 /* BlinkMessengerApp.swift */; };
+		BF0000000000000000000002 /* ApiModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000002 /* ApiModels.swift */; };
+		BF0000000000000000000003 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000003 /* APIService.swift */; };
+		BF0000000000000000000004 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000004 /* AppState.swift */; };
+		BF0000000000000000000005 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000005 /* KeychainService.swift */; };
+		BF0000000000000000000006 /* PushNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000006 /* PushNotificationManager.swift */; };
+		BF0000000000000000000007 /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000007 /* SocketService.swift */; };
+		BF0000000000000000000008 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000008 /* AuthView.swift */; };
+		BF0000000000000000000009 /* CallScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000009 /* CallScreenView.swift */; };
+		BF0000000000000000000010 /* ChatsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000010 /* ChatsListView.swift */; };
+		BF0000000000000000000011 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000011 /* ChatView.swift */; };
+		BF0000000000000000000012 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000012 /* ContentView.swift */; };
+		BF0000000000000000000013 /* NewChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000013 /* NewChatView.swift */; };
+		BF0000000000000000000014 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000014 /* SettingsView.swift */; };
+		BF0000000000000000000015 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000000000000000000015 /* UserProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		AA0000000000000000000008 /* BlinkMessenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlinkMessenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF0000000000000000000001 /* BlinkMessengerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/BlinkMessengerApp.swift; sourceTree = "<group>"; };
+		FF0000000000000000000002 /* ApiModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Models/ApiModels.swift; sourceTree = "<group>"; };
+		FF0000000000000000000003 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Services/APIService.swift; sourceTree = "<group>"; };
+		FF0000000000000000000004 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Services/AppState.swift; sourceTree = "<group>"; };
+		FF0000000000000000000005 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Services/KeychainService.swift; sourceTree = "<group>"; };
+		FF0000000000000000000006 /* PushNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Services/PushNotificationManager.swift; sourceTree = "<group>"; };
+		FF0000000000000000000007 /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Services/SocketService.swift; sourceTree = "<group>"; };
+		FF0000000000000000000008 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Views/AuthView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000009 /* CallScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Views/CallScreenView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000010 /* ChatsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Views/ChatsListView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000011 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Views/ChatView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000012 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Views/ContentView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000013 /* NewChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Views/NewChatView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000014 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Views/SettingsView.swift; sourceTree = "<group>"; };
+		FF0000000000000000000015 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkMessenger/Views/UserProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		AA0000000000000000000003 /* BlinkMessenger */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			children = (
-			);
-			path = ../BlinkMessenger;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		AA0000000000000000000007 /* Frameworks */ = {
@@ -38,12 +57,26 @@
 		AA0000000000000000000002 /* Root */ = {
 			isa = PBXGroup;
 			children = (
-				AA0000000000000000000003 /* BlinkMessenger */,
-				AA0000000000000000000004 /* Product group */,
+				FF0000000000000000000001 /* BlinkMessengerApp.swift */,
+				FF0000000000000000000002 /* ApiModels.swift */,
+				FF0000000000000000000003 /* APIService.swift */,
+				FF0000000000000000000004 /* AppState.swift */,
+				FF0000000000000000000005 /* KeychainService.swift */,
+				FF0000000000000000000006 /* PushNotificationManager.swift */,
+				FF0000000000000000000007 /* SocketService.swift */,
+				FF0000000000000000000008 /* AuthView.swift */,
+				FF0000000000000000000009 /* CallScreenView.swift */,
+				FF0000000000000000000010 /* ChatsListView.swift */,
+				FF0000000000000000000011 /* ChatView.swift */,
+				FF0000000000000000000012 /* ContentView.swift */,
+				FF0000000000000000000013 /* NewChatView.swift */,
+				FF0000000000000000000014 /* SettingsView.swift */,
+				FF0000000000000000000015 /* UserProfileView.swift */,
+				AA000000000000000000000B /* Product group */,
 			);
 			sourceTree = "<group>";
 		};
-		AA0000000000000000000004 /* Product group */ = {
+		AA000000000000000000000B /* Product group */ = {
 			isa = PBXGroup;
 			children = (
 				AA0000000000000000000008 /* BlinkMessenger.app */,
@@ -89,7 +122,7 @@
 				Base,
 			);
 			mainGroup = AA0000000000000000000002 /* Root */;
-			productRefGroup = AA0000000000000000000004 /* Product group */;
+			productRefGroup = AA000000000000000000000B /* Product group */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -103,7 +136,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA0000000000000000000009 /* BlinkMessenger in Sources */,
+				BF0000000000000000000001 /* BlinkMessengerApp.swift in Sources */,
+				BF0000000000000000000002 /* ApiModels.swift in Sources */,
+				BF0000000000000000000003 /* APIService.swift in Sources */,
+				BF0000000000000000000004 /* AppState.swift in Sources */,
+				BF0000000000000000000005 /* KeychainService.swift in Sources */,
+				BF0000000000000000000006 /* PushNotificationManager.swift in Sources */,
+				BF0000000000000000000007 /* SocketService.swift in Sources */,
+				BF0000000000000000000008 /* AuthView.swift in Sources */,
+				BF0000000000000000000009 /* CallScreenView.swift in Sources */,
+				BF0000000000000000000010 /* ChatsListView.swift in Sources */,
+				BF0000000000000000000011 /* ChatView.swift in Sources */,
+				BF0000000000000000000012 /* ContentView.swift in Sources */,
+				BF0000000000000000000013 /* NewChatView.swift in Sources */,
+				BF0000000000000000000014 /* SettingsView.swift in Sources */,
+				BF0000000000000000000015 /* UserProfileView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
