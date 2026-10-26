@@ -1,0 +1,211 @@
+// Blink Messenger Database Schema
+// Run: npx prisma generate && npx prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  phoneNumber   String    @unique
+  name          String?
+  avatarUrl     String?
+  bio           String?
+  isOnline      Boolean   @default(false)
+  lastSeen      DateTime? @default(now())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  conversations ConversationParticipant[]
+  messages      Message[]
+  sentCalls     Call[]        @relation("CallInitiator")
+  receivedCalls Call[]        @relation("CallReceiver")
+  devices       Device[]
+  contacts      Contact[]     @relation("ContactOwner")
+  blockedUsers  BlockedUser[] @relation("Blocker")
+  blockedBy     BlockedUser[] @relation("Blocked")
+
+  @@index([phoneNumber])
+}
+
+model Device {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique // APNs push token
+  platform  String   // ios, android, web
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, token])
+}
+
+model Conversation {
+  id          String   @id @default(uuid())
+  type        ConversationType @default(PRIVATE)
+  name        String?
+  avatarUrl   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  participants ConversationParticipant[]
+  messages     Message[]
+  calls        Call[]
+}
+
+enum ConversationType {
+  PRIVATE
+  GROUP
+}
+
+model ConversationParticipant {
+  id             String       @id @default(uuid())
+  userId         String
+  conversationId String
+  role           ParticipantRole @default(MEMBER)
+  joinedAt       DateTime     @default(now())
+  leftAt         DateTime?
+  lastReadAt     DateTime?
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, conversationId])
+}
+
+enum ParticipantRole {
+  ADMIN
+  MEMBER
+}
+
+model Message {
+  id             String        @id @default(uuid())
+  conversationId String
+  senderId       String
+  type           MessageType   @default(TEXT)
+  content        String?       // Text content or file caption
+  mediaUrl       String?       // For photo/video/file
+  mediaType      String?       // image, video, document, audio
+  mediaSize      Int?
+  duration       Int?          // For voice/video messages in seconds
+  replyToId      String?
+  isEdited       Boolean       @default(false)
+  isDeleted      Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  conversation Conversation     @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User             @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  replyTo      Message?         @relation("MessageReplies", fields: [replyToId], references: [id])
+  replies      Message[]        @relation("MessageReplies")
+  statuses     MessageStatus[]
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+  VOICE_MESSAGE
+  VIDEO_MESSAGE
+  LOCATION
+  CONTACT
+  CALL_LOG
+  SYSTEM
+}
+
+model MessageStatus {
+  id        String   @id @default(uuid())
+  messageId String
+  userId    String
+  status    MessageStatusType @default(SENT)
+  createdAt DateTime @default(now())
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
+}
+
+enum MessageStatusType {
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+model Call {
+  id             String      @id @default(uuid())
+  conversationId String
+  initiatorId    String
+  receiverId     String
+  type           CallType
+  status         CallStatus  @default(INITIATED)
+  startedAt      DateTime?
+  answeredAt     DateTime?
+  endedAt        DateTime?
+  duration       Int?        // In seconds
+  createdAt      DateTime    @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  initiator    User         @relation("CallInitiator", fields: [initiatorId], references: [id])
+  receiver     User         @relation("CallReceiver", fields: [receiverId], references: [id])
+}
+
+enum CallType {
+  VOICE
+  VIDEO
+}
+
+enum CallStatus {
+  INITIATED
+  RINGING
+  ANSWERED
+  REJECTED
+  MISSED
+  ENDED
+  FAILED
+}
+
+model Contact {
+  id        String   @id @default(uuid())
+  ownerId   String
+  contactId String
+  name      String?  // Custom name for contact
+  createdAt DateTime @default(now())
+
+  owner   User @relation("ContactOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  contact User @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@unique([ownerId, contactId])
+}
+
+model BlockedUser {
+  id        String   @id @default(uuid())
+  blockerId String
+  blockedId String
+  createdAt DateTime @default(now())
+
+  blocker User @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+}
+
+model VerificationCode {
+  id        String   @id @default(uuid())
+  phoneNumber String @unique
+  code      String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([phoneNumber])
+}
