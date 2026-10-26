@@ -38,13 +38,11 @@ struct ChatView: View {
                         onScrollToBottom: scrollToBottom
                     )
                     .onAppear { scrollProxy = proxy }
-                    .onChange(of: viewModel.messages.count) { _, _ in
-                        scrollToBottom()
+                    .onChange(of: viewModel.messages.count) { _ in
+                        _ = scrollToBottom()
                     }
-                    .onChange(of: isInputFocused) { _, focused in
-                        if let focused = focused, focused {
-                            scrollToBottom()
-                        }
+                    .onChange(of: isInputFocused) { _ in
+                        _ = scrollToBottom()
                     }
                 }
                 
