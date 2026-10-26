@@ -42,7 +42,7 @@ struct ChatView: View {
                         scrollToBottom()
                     }
                     .onChange(of: isInputFocused) { _, focused in
-                        if focused {
+                        if let focused = focused, focused {
                             scrollToBottom()
                         }
                     }
