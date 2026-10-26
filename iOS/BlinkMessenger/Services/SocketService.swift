@@ -188,8 +188,12 @@ final class SocketService: ObservableObject {
     }
     
     func emit(_ event: String, _ data: any Codable) async {
-        let payload = try? encoder.encode([event, data])
-        let payloadString = payload.flatMap { String(data: $0, encoding: .utf8) } ?? "[]"
+        // Encode data first
+        guard let dataJson = try? encoder.encode(data),
+              let dataString = String(data: dataJson, encoding: .utf8) else {
+            return
+        }
+        let payloadString = "[\"\(event)\",\(dataString)]"
         await sendSocketIOPacket(type: 2, data: payloadString)
     }
     

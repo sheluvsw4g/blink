@@ -20,7 +20,7 @@ struct CallScreenView: View {
             
             VStack(spacing: 0) {
                 // Top bar
-                CallTopBarView(showingEndCallAlert: $showingEndCallAlert)
+                CallTopBarView(showingEndCallAlert: $showingEndCallAlert, otherUserName: viewModel.callInfo.otherUser.displayName, duration: viewModel.callDuration)
                 
                 Spacer()
                 
@@ -119,6 +119,8 @@ final class CallViewModel: ObservableObject {
 
 struct CallTopBarView: View {
     @Binding var showingEndCallAlert: Bool
+    let otherUserName: String
+    let duration: TimeInterval
     
     var body: some View {
         VStack(spacing: 0) {
@@ -138,13 +140,13 @@ struct CallTopBarView: View {
                     Text("Calling...")
                         .font(.headline)
                         .foregroundColor(.white)
-                    Text(viewModel.callInfo.otherUser.displayName)
+                    Text(otherUserName)
                         .font(.subheadline)
                         .foregroundColor(.white.opacity(0.7))
                 }
                 
                 // Duration
-                Text(formatDuration(Int(viewModel.callDuration)))
+                Text(formatDuration(Int(duration)))
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.white.opacity(0.7))
             }
