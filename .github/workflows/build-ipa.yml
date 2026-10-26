@@ -25,14 +25,14 @@ jobs:
         with:
           xcode-version: latest
 
-      - name: Build Archive (Unsigned)
+      - name: Build (Unsigned)
         run: |
           xcodebuild \
             -project "${{ env.PROJECT_PATH }}" \
             -scheme "${{ env.SCHEME }}" \
             -configuration Release \
             -destination "generic/platform=iOS" \
-            -archivePath "$RUNNER_TEMP/BlinkMessenger.xcarchive" \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGN_STYLE=Manual
@@ -40,11 +40,11 @@ jobs:
       - name: Create Unsigned IPA
         run: |
           set -e
-          APP="$RUNNER_TEMP/BlinkMessenger.xcarchive/Products/Release-iphoneos/BlinkMessenger.app"
+          APP="$RUNNER_TEMP/DerivedData/Build/Products/Release-iphoneos/BlinkMessenger.app"
           if [ ! -d "$APP" ]; then
             echo "App not found at $APP"
-            echo "Contents of archive:"
-            find "$RUNNER_TEMP/BlinkMessenger.xcarchive" -maxdepth 3 -type d
+            echo "Searching..."
+            find "$RUNNER_TEMP/DerivedData" -name "BlinkMessenger.app" -type d
             exit 1
           fi
           mkdir -p "$RUNNER_TEMP/ipa/Payload"
