@@ -38,9 +38,9 @@ final class SocketService: ObservableObject {
         
         // TODO: Change to your backend WebSocket URL
         #if DEBUG
-        let wsURL = "ws://localhost:3000/socket.io/?token=\(token)&transport=websocket"
+        let wsURL = "ws://192.168.0.76:3000/socket.io/?token=\(token)&transport=websocket"
         #else
-        let wsURL = "wss://your-production-domain.com/socket.io/?token=\(token)&transport=websocket"
+        let wsURL = "ws://192.168.0.76:3000/socket.io/?token=\(token)&transport=websocket"
         #endif
         
         guard let url = URL(string: wsURL) else {

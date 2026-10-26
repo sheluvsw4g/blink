@@ -38,9 +38,9 @@ final class APIService {
         // For device testing: http://YOUR_LOCAL_IP:3000
         // For production: https://your-domain.com
         #if DEBUG
-        self.baseURL = "http://localhost:3000/api"
+        self.baseURL = "http://192.168.0.76:3000/api"
         #else
-        self.baseURL = "https://your-production-domain.com/api"
+        self.baseURL = "http://192.168.0.76:3000/api"
         #endif
         
         let config = URLSessionConfiguration.default
