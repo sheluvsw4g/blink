@@ -74,7 +74,7 @@ final class APIService {
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        if requiresAuth, let token = AppState.shared.accessToken {
+        if requiresAuth, let token = await AppState.shared.accessToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
@@ -100,7 +100,7 @@ final class APIService {
                 if requiresAuth {
                     try await refreshTokenIfNeeded()
                     // Retry once
-                    return try await request(endpoint, method: method, body: body, requiresAuth: requiresAuth, responseType: responseType)
+                    return try await self.request(endpoint, method: method, body: body, requiresAuth: requiresAuth, responseType: responseType)
                 }
                 throw APIError.unauthorized
             case 400..<500:
@@ -117,7 +117,7 @@ final class APIService {
     }
     
     private func refreshTokenIfNeeded() async throws {
-        guard let refreshToken = AppState.shared.refreshToken else {
+        guard let refreshToken = await AppState.shared.refreshToken else {
             throw APIError.unauthorized
         }
         
@@ -364,11 +364,11 @@ final class APIService {
         return try await request(endpoint, responseType: MessagesResponse.self)
     }
     
-    func sendMessage(_ request: SendMessageRequest) async throws -> Message {
+    func sendMessage(_ sendMessageRequest: SendMessageRequest) async throws -> Message {
         let response: SingleMessageResponse = try await request(
             "/messages",
             method: "POST",
-            body: request,
+            body: sendMessageRequest,
             responseType: SingleMessageResponse.self
         )
         return response.message
@@ -462,7 +462,7 @@ final class APIService {
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
-        if let token = AppState.shared.accessToken {
+        if let token = await AppState.shared.accessToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         

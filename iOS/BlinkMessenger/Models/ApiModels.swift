@@ -100,10 +100,10 @@ struct Conversation: Codable, Identifiable, Hashable {
     let name: String?
     let avatarUrl: String?
     let createdAt: Date
-    let updatedAt: Date
+    var updatedAt: Date
     let participants: [ConversationParticipant]
-    let lastMessage: MessagePreview?
-    let unreadCount: Int
+    var lastMessage: MessagePreview?
+    var unreadCount: Int
     
     var displayName: String {
         if type == .GROUP {

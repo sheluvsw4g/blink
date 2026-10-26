@@ -127,7 +127,7 @@ final class AppState: ObservableObject {
     }
     
     func restoreSession() async {
-        guard let token = accessToken, let refresh = refreshToken else {
+        guard let _ = accessToken, let refresh = refreshToken else {
             authState = .unauthenticated
             return
         }
