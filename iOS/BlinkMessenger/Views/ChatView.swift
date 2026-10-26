@@ -27,25 +27,16 @@ struct ChatView: View {
             VStack(spacing: 0) {
                 // Messages list
                 ScrollViewReader { proxy in
-                    ScrollView {
-                        LazyVStack(spacing: 0) {
-                            MessagesListView(
-                                messages: viewModel.messages,
-                                currentUserId: appState.currentUser?.id,
-                                replyingToMessage: $replyingToMessage,
-                                onLoadMore: {
-                                    await viewModel.loadMoreIfNeeded()
-                                }
-                            )
-                            
-                            if viewModel.isLoadingMore {
-                                ProgressView()
-                                    .padding()
-                            }
-                        }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 12)
-                    }
+                    ChatMessagesScrollView(
+                        messages: viewModel.messages,
+                        currentUserId: appState.currentUser?.id,
+                        replyingToMessage: $replyingToMessage,
+                        isLoadingMore: viewModel.isLoadingMore,
+                        onLoadMore: {
+                            await viewModel.loadMoreIfNeeded()
+                        },
+                        onScrollToBottom: scrollToBottom
+                    )
                     .onAppear { scrollProxy = proxy }
                     .onChange(of: viewModel.messages.count) { _, _ in
                         scrollToBottom()
@@ -149,27 +140,40 @@ struct ChatView: View {
     }
 }
 
-// MARK: - Messages List View
+// MARK: - Chat Messages Scroll View
 
-struct MessagesListView: View {
+struct ChatMessagesScrollView: View {
     let messages: [Message]
     let currentUserId: String?
     @Binding var replyingToMessage: Message?
+    let isLoadingMore: Bool
     let onLoadMore: () async -> Void
+    let onScrollToBottom: () -> Void
     
     var body: some View {
-        ForEach(messages) { message in
-            MessageBubbleView(
-                message: message,
-                isFromCurrentUser: message.senderId == currentUserId,
-                replyingToMessage: $replyingToMessage
-            )
-            .id(message.id)
-            .onAppear {
-                Task {
-                    await onLoadMore()
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(messages) { message in
+                    MessageBubbleView(
+                        message: message,
+                        isFromCurrentUser: message.senderId == currentUserId,
+                        replyingToMessage: $replyingToMessage
+                    )
+                    .id(message.id)
+                    .onAppear {
+                        Task {
+                            await onLoadMore()
+                        }
+                    }
+                }
+                
+                if isLoadingMore {
+                    ProgressView()
+                        .padding()
                 }
             }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 12)
         }
     }
 }
